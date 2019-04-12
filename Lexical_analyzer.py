@@ -42,4 +42,5 @@ def get_next_token():
         eval(acceptable_state[0] + '(' + acceptable_state[1] + ')')
 
 
+
 print(letter)
