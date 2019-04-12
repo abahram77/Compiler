@@ -22,15 +22,26 @@ def SymNumIdKeySpace(not_used):
     char = code_string[code_pointer]
     if char in symbol:
         new_state = ['symbol', char]
-
         return
+
+    if char in space:
+        new_state = ['']
 
         # TODO: under construction
 
 
-def symbol(char):
+def symbol(pre_char):
+    global code_pointer,new_state
     char = code_string[code_pointer]
-    if char in symbol_permutations.get(char):
+    if char in symbol_permutations.get(pre_char):
+        code_pointer += 1
+        if char == '>' or char == '<':
+            char = code_string[code_pointer]
+            if char == '=':
+                code_pointer += 1
+
+    new_state = ['error_state', ' ']
+    return
 
 
 
