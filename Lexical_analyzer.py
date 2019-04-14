@@ -1,6 +1,6 @@
 import string
 
-code_string = "int main(void) {if i == j: 12exit()}"
+code_string = "int }"
 code_pointer = 0
 token = []
 symbols = ['{', '}', ';', ':', ',', '(', ')', '&', '*', '=', '+', '%', '^', '!', '|', '/', '>', '<', '~', '[', '[', '"',
@@ -33,7 +33,7 @@ def SymNumIdKeySpace(not_used):
     code_pointer += 1
     if char in symbols:
         new_state = ['symbol', char]
-        return ''
+        return char
 
     if char in space:
         new_state = ['end_of_token', ' ']
@@ -86,7 +86,7 @@ def number(not_used):
 
 
 def symbol(pre_char):
-    token = pre_char
+    token = ''
     global code_pointer, new_state
     char = code_string[code_pointer]
     if char in symbol_permutations.get(pre_char):
@@ -110,10 +110,14 @@ def get_next_token():
     token = ''
 
     while code_pointer < len(code_string):
-        while new_state[0] != 'end_of_token' and code_pointer < len(code_string):
-            acceptable_state = new_state
-            print(acceptable_state[0] + '(' + acceptable_state[1] + ')')
-            token += eval(acceptable_state[0] + "('" + acceptable_state[1] + "')")
+        while new_state[0] != 'end_of_token':
+            if code_pointer < len(code_string):
+                acceptable_state = new_state
+                print(acceptable_state[0] + '(' + acceptable_state[1] + ')')
+                token += eval(acceptable_state[0] + "('" + acceptable_state[1] + "')")
+            else:
+                acceptable_state = new_state
+                break
 
         if valid_token:
             if acceptable_state[0] == 'IdKey':
