@@ -1,8 +1,7 @@
 import string
 
-code_string = "void main() {ok ok}"
+code_string = "int }"
 code_pointer = 0
-# States: state_
 token = []
 symbols = ['{', '}', ';', ':', ',', '(', ')', '&', '*', '=', '+', '%', '^', '!', '|', '/', '>', '<', '~', '[', '[', '"',
            "'", '-', '?']
@@ -29,12 +28,12 @@ error_list = []
 
 
 def SymNumIdKeySpace(not_used):
-    global new_state, code_pointer
+    global new_state, code_pointer, valid_token
     char = code_string[code_pointer]
     code_pointer += 1
     if char in symbols:
         new_state = ['symbol', char]
-        return ''
+        return char
 
     if char in space:
         new_state = ['end_of_token', ' ']
@@ -50,6 +49,7 @@ def SymNumIdKeySpace(not_used):
 
     valid_token = False
     code_pointer += 1
+    return char
 
 
 def IdKey(not_used):
@@ -66,10 +66,11 @@ def IdKey(not_used):
 
     valid_token = False
     code_pointer += 1
+    return char
 
 
 def number(not_used):
-    global new_state, code_pointer
+    global new_state, code_pointer, valid_token
     char = code_string[code_pointer]
 
     if (char in space) or (char in symbols):
@@ -85,14 +86,14 @@ def number(not_used):
 
 
 def symbol(pre_char):
-    token = pre_char
+    token = ''
     global code_pointer, new_state
     char = code_string[code_pointer]
-    print("this is pre char", pre_char, symbol_permutations.get(pre_char))
     if char in symbol_permutations.get(pre_char):
         token += char
         code_pointer += 1
-        if char == '>' or char == '<':
+
+        if code_pointer < len(code_string) and (char == '>' or char == '<'):
             char = code_string[code_pointer]
             if char == '=':
                 token += char
@@ -107,11 +108,16 @@ def get_next_token():
     acceptable_state = [None, ' ']
     new_state = ['SymNumIdKeySpace', ' ']
     token = ''
+
     while code_pointer < len(code_string):
-        while new_state[0] != 'end_of_token' and code_pointer < len(code_string):
-            acceptable_state = new_state
-            # print(acceptable_state[0] + '(' + acceptable_state[1] + ')')
-            token += eval(acceptable_state[0] + "('" + acceptable_state[1] + "')")
+        while new_state[0] != 'end_of_token':
+            if code_pointer < len(code_string):
+                acceptable_state = new_state
+                print(acceptable_state[0] + '(' + acceptable_state[1] + ')')
+                token += eval(acceptable_state[0] + "('" + acceptable_state[1] + "')")
+            else:
+                acceptable_state = new_state
+                break
 
         if valid_token:
             if acceptable_state[0] == 'IdKey':
@@ -126,7 +132,7 @@ def get_next_token():
 
         token = ''
         valid_token = True
-        acceptable_state = [None, None]
+        acceptable_state = [None, ' ']
         new_state = ['SymNumIdKeySpace', ' ']
 
 
