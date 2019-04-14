@@ -9,7 +9,8 @@ symbols = ['{', '}', ';', ':', ',', '(', ')', '&', '*', '=', '+', '%', '^', '!',
 dict
 symbol_permutations = {'&': ['&', '='], '=': ['='], '+': ['+', '='], '-': ['-', '='], '%': ['='], '*': ['*', '='],
                        '|': ['|', '='], '/': ['='], '>': ['>', '='], '<': ['<', '='], '~': ['='], '^': ['='],
-                       '>>': ['='], '<<': ['=']}
+                       '>>': ['='], '<<': ['='], '{': [], '}': [], ':': [], ';': [], ',': [], '(': [], ')': [],
+                       '!': ['='], '[': [], ']': [], '"': [], "'": [], '?': []}
 
 key_words = ['auto', 'break', 'case', 'char',
              'const', 'continue', 'default', 'do',
@@ -87,6 +88,7 @@ def symbol(pre_char):
     token = pre_char
     global code_pointer, new_state
     char = code_string[code_pointer]
+    print("this is pre char", pre_char, symbol_permutations.get(pre_char))
     if char in symbol_permutations.get(pre_char):
         token += char
         code_pointer += 1
@@ -109,14 +111,15 @@ def get_next_token():
         while new_state[0] != 'end_of_token' and code_pointer < len(code_string):
             acceptable_state = new_state
             # print(acceptable_state[0] + '(' + acceptable_state[1] + ')')
-            token += eval(acceptable_state[0] + "('" + acceptable_state[1] + "')" )
+            token += eval(acceptable_state[0] + "('" + acceptable_state[1] + "')")
 
         if valid_token:
             if acceptable_state[0] == 'IdKey':
                 acceptable_state[0] = 'ID'
                 if token in key_words:
                     acceptable_state[0] = 'keyword'
-            token_list += [(token, acceptable_state[0])]
+            if token != '':
+                token_list += [(token, acceptable_state[0])]
 
         else:
             error_list += [(token, 'invalid input')]
