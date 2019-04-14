@@ -1,15 +1,21 @@
 import string
 
-code_string = ""
+code_string = "if (b == 3){" \
+              "a= 3;" \
+              "cd!e = -7;" \
+              "else" \
+              "return;"
+
+# code_string = 'b != a'
 code_pointer = 0
 token = []
-symbols = ['{', '}', ';', ':', ',', '(', ')', '&', '*', '=', '+', '%', '^', '!', '|', '/', '>', '<', '~', '[', '[', '"',
+symbols = ['{', '}', ';', ':', ',', '(', ')', '&', '*', '=', '+', '%', '^', '|', '/', '>', '<', '~', '[', '[', '"',
            "'", '-', '?']
 dict
 symbol_permutations = {'&': ['&', '='], '=': ['='], '+': ['+', '='], '-': ['-', '='], '%': ['='], '*': ['*', '='],
                        '|': ['|', '='], '/': ['='], '>': ['>', '='], '<': ['<', '='], '~': ['='], '^': ['='],
                        '>>': ['='], '<<': ['='], '{': [], '}': [], ':': [], ';': [], ',': [], '(': [], ')': [],
-                       '!': ['='], '[': [], ']': [], '"': [], "'": [], '?': []}
+                       '!=': [], '[': [], ']': [], '"': [], "'": [], '?': []}
 
 key_words = ['auto', 'break', 'case', 'char',
              'const', 'continue', 'default', 'do',
@@ -47,8 +53,12 @@ def SymNumIdKeySpace(not_used):
         new_state = ['IdKey', ' ']
         return char
 
+    if char == '!' and code_pointer < len(code_string) and code_string[code_pointer] == '=':
+        code_pointer += 1
+        new_state = ['symbol', '!=']
+        return '!='
+
     valid_token = False
-    code_pointer += 1
     return char
 
 
@@ -126,10 +136,10 @@ def get_next_token():
                 if token in key_words:
                     acceptable_state[0] = 'keyword'
             if token != '':
-                token_list += [(token, acceptable_state[0])]
+                token_list += [(acceptable_state[0], token)]
 
         else:
-            error_list += [(token, 'invalid input')]
+            error_list += [('invalid input', token)]
 
         token = ''
         valid_token = True
