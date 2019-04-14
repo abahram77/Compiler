@@ -1,6 +1,6 @@
 import string
 
-code_string = "=$"
+code_string = "int main(void) {if i == j: 12exit()}"
 code_pointer = 0
 token = []
 symbols = ['{', '}', ';', ':', ',', '(', ')', '&', '*', '=', '+', '%', '^', '!', '|', '/', '>', '<', '~', '[', '[', '"',
@@ -49,6 +49,7 @@ def SymNumIdKeySpace(not_used):
 
     valid_token = False
     code_pointer += 1
+    return char
 
 
 def IdKey(not_used):
@@ -65,6 +66,7 @@ def IdKey(not_used):
 
     valid_token = False
     code_pointer += 1
+    return char
 
 
 def number(not_used):
@@ -106,6 +108,7 @@ def get_next_token():
     acceptable_state = [None, ' ']
     new_state = ['SymNumIdKeySpace', ' ']
     token = ''
+
     while code_pointer < len(code_string):
         while new_state[0] != 'end_of_token' and code_pointer < len(code_string):
             acceptable_state = new_state
