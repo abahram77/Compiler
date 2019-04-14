@@ -1,6 +1,6 @@
 import string
 
-code_string = "int }"
+code_string = ""
 code_pointer = 0
 token = []
 symbols = ['{', '}', ';', ':', ',', '(', ')', '&', '*', '=', '+', '%', '^', '!', '|', '/', '>', '<', '~', '[', '[', '"',
@@ -83,6 +83,7 @@ def number(not_used):
 
     valid_token = False
     code_pointer += 1
+    return char
 
 
 def symbol(pre_char):
@@ -113,7 +114,7 @@ def get_next_token():
         while new_state[0] != 'end_of_token':
             if code_pointer < len(code_string):
                 acceptable_state = new_state
-                print(acceptable_state[0] + '(' + acceptable_state[1] + ')')
+                # print(acceptable_state[0] + '(' + acceptable_state[1] + ')')
                 token += eval(acceptable_state[0] + "('" + acceptable_state[1] + "')")
             else:
                 acceptable_state = new_state
