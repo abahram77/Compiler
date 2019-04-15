@@ -1,10 +1,6 @@
 import string
 
-code_string = "if (b == 3){" \
-              "a= 3;" \
-              "cd!e = -7;" \
-              "else" \
-              "return;"
+code_string = ('void /*  ldksjdflk  main /')
 
 # code_string = 'b != a'
 code_pointer = 0
@@ -13,7 +9,7 @@ symbols = ['{', '}', ';', ':', ',', '(', ')', '&', '*', '=', '+', '%', '^', '|',
            "'", '-', '?']
 dict
 symbol_permutations = {'&': ['&', '='], '=': ['='], '+': ['+', '='], '-': ['-', '='], '%': ['='], '*': ['*', '='],
-                       '|': ['|', '='], '/': ['='], '>': ['>', '='], '<': ['<', '='], '~': ['='], '^': ['='],
+                       '|': ['|', '='], '/': ['=', '/', '*'], '>': ['>', '='], '<': ['<', '='], '~': ['='], '^': ['='],
                        '>>': ['='], '<<': ['='], '{': [], '}': [], ':': [], ';': [], ',': [], '(': [], ')': [],
                        '!=': [], '[': [], ']': [], '"': [], "'": [], '?': []}
 
@@ -110,8 +106,42 @@ def symbol(pre_char):
                 token += char
                 code_pointer += 1
 
+        if char == '/':
+            new_state = ['one_line_comment', ' ']
+            return ''
+
+        if pre_char == '/' and char == '*':
+            new_state = ['multi_line_comment', ' ']
+            return ''
+
     new_state = ['end_of_token', ' ']
     return token
+
+
+def one_line_comment(not_used):
+    global code_string, code_pointer, new_state
+    char = code_string[code_pointer]
+    code_pointer += 1
+    if char == '\n':
+        new_state = ['end_of_token']
+        return ''
+
+    return ''
+
+
+def multi_line_comment(not_used):
+    global code_string, code_pointer, new_state, valid_token
+    valid_token = False
+    char = code_string[code_pointer]
+    code_pointer += 1
+    if char == '*':
+        if code_pointer < len(code_string):
+            if code_string[code_pointer] == '/':
+                valid_token = True
+                code_pointer += 1
+                new_state = ['end_of_token', ' ']
+                return ''
+    return ''
 
 
 def get_next_token():
@@ -124,7 +154,6 @@ def get_next_token():
         while new_state[0] != 'end_of_token':
             if code_pointer < len(code_string):
                 acceptable_state = new_state
-                # print(acceptable_state[0] + '(' + acceptable_state[1] + ')')
                 token += eval(acceptable_state[0] + "('" + acceptable_state[1] + "')")
             else:
                 acceptable_state = new_state
@@ -135,11 +164,15 @@ def get_next_token():
                 acceptable_state[0] = 'ID'
                 if token in key_words:
                     acceptable_state[0] = 'keyword'
-            if token != '':
+            if token != '' and acceptable_state[0] != 'one_line_comment' and acceptable_state[0] \
+                    != 'multi_line_comment':
                 token_list += [(acceptable_state[0], token)]
 
         else:
-            error_list += [('invalid input', token)]
+            if new_state[0] == 'multi_line_comment':
+                error_list += [('invalid comment', '/*')]
+            else:
+                error_list += [('invalid input', token)]
 
         token = ''
         valid_token = True
