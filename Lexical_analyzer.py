@@ -1,6 +1,13 @@
 import string
 
-code_string = ('void /*  ldksjdflk  main /')
+file_name = 'testcase_1.txt'
+input_file = open(file_name, mode='r')
+code_string = input_file.read()
+
+scanner_file_name = './scanner.txt'
+scanner_file = open(scanner_file_name, mode='w')
+lexical_file_name = './lexical_errors.txt'
+error_file = open(lexical_file_name, mode='w')
 
 # code_string = 'b != a'
 code_pointer = 0
@@ -180,5 +187,17 @@ def get_next_token():
         new_state = ['SymNumIdKeySpace', ' ']
 
 
+def output_form_converter(token):
+    output = []
+    for t in token:
+        output += ['(' + t[0] + ', ' + t[1] + ')']
+    return output
+
+
 get_next_token()
-print(token_list, error_list)
+token_list = output_form_converter(token_list)
+error_list = output_form_converter(error_list)
+
+scanner_file.write(' '.join(token_list))
+error_file.write(' ,'.join(error_list))
+# print(token_list, error_list)
