@@ -1,15 +1,24 @@
 import string
 
-code_string = "int }"
+file_name = 'testcase_1.txt'
+input_file = open(file_name, mode='r')
+code_string = input_file.read()
+
+scanner_file_name = './scanner.txt'
+scanner_file = open(scanner_file_name, mode='w')
+lexical_file_name = './lexical_errors.txt'
+error_file = open(lexical_file_name, mode='w')
+
+# code_string = 'b != a'
 code_pointer = 0
 token = []
-symbols = ['{', '}', ';', ':', ',', '(', ')', '&', '*', '=', '+', '%', '^', '!', '|', '/', '>', '<', '~', '[', '[', '"',
+symbols = ['{', '}', ';', ':', ',', '(', ')', '&', '*', '=', '+', '%', '^', '|', '/', '>', '<', '~', '[', '[', '"',
            "'", '-', '?']
 dict
 symbol_permutations = {'&': ['&', '='], '=': ['='], '+': ['+', '='], '-': ['-', '='], '%': ['='], '*': ['*', '='],
-                       '|': ['|', '='], '/': ['='], '>': ['>', '='], '<': ['<', '='], '~': ['='], '^': ['='],
+                       '|': ['|', '='], '/': ['=', '/', '*'], '>': ['>', '='], '<': ['<', '='], '~': ['='], '^': ['='],
                        '>>': ['='], '<<': ['='], '{': [], '}': [], ':': [], ';': [], ',': [], '(': [], ')': [],
-                       '!': ['='], '[': [], ']': [], '"': [], "'": [], '?': []}
+                       '!=': [], '[': [], ']': [], '"': [], "'": [], '?': []}
 
 key_words = ['auto', 'break', 'case', 'char',
              'const', 'continue', 'default', 'do',
@@ -47,8 +56,12 @@ def SymNumIdKeySpace(not_used):
         new_state = ['IdKey', ' ']
         return char
 
+    if char == '!' and code_pointer < len(code_string) and code_string[code_pointer] == '=':
+        code_pointer += 1
+        new_state = ['symbol', '!=']
+        return '!='
+
     valid_token = False
-    code_pointer += 1
     return char
 
 
@@ -83,6 +96,7 @@ def number(not_used):
 
     valid_token = False
     code_pointer += 1
+    return char
 
 
 def symbol(pre_char):
@@ -99,8 +113,42 @@ def symbol(pre_char):
                 token += char
                 code_pointer += 1
 
+        if char == '/':
+            new_state = ['one_line_comment', ' ']
+            return ''
+
+        if pre_char == '/' and char == '*':
+            new_state = ['multi_line_comment', ' ']
+            return ''
+
     new_state = ['end_of_token', ' ']
     return token
+
+
+def one_line_comment(not_used):
+    global code_string, code_pointer, new_state
+    char = code_string[code_pointer]
+    code_pointer += 1
+    if char == '\n':
+        new_state = ['end_of_token']
+        return ''
+
+    return ''
+
+
+def multi_line_comment(not_used):
+    global code_string, code_pointer, new_state, valid_token
+    valid_token = False
+    char = code_string[code_pointer]
+    code_pointer += 1
+    if char == '*':
+        if code_pointer < len(code_string):
+            if code_string[code_pointer] == '/':
+                valid_token = True
+                code_pointer += 1
+                new_state = ['end_of_token', ' ']
+                return ''
+    return ''
 
 
 def get_next_token():
@@ -113,7 +161,6 @@ def get_next_token():
         while new_state[0] != 'end_of_token':
             if code_pointer < len(code_string):
                 acceptable_state = new_state
-                print(acceptable_state[0] + '(' + acceptable_state[1] + ')')
                 token += eval(acceptable_state[0] + "('" + acceptable_state[1] + "')")
             else:
                 acceptable_state = new_state
@@ -124,11 +171,15 @@ def get_next_token():
                 acceptable_state[0] = 'ID'
                 if token in key_words:
                     acceptable_state[0] = 'keyword'
-            if token != '':
-                token_list += [(token, acceptable_state[0])]
+            if token != '' and acceptable_state[0] != 'one_line_comment' and acceptable_state[0] \
+                    != 'multi_line_comment':
+                token_list += [(acceptable_state[0], token)]
 
         else:
-            error_list += [(token, 'invalid input')]
+            if new_state[0] == 'multi_line_comment':
+                error_list += [('invalid comment', '/*')]
+            else:
+                error_list += [('invalid input', token)]
 
         token = ''
         valid_token = True
@@ -136,5 +187,17 @@ def get_next_token():
         new_state = ['SymNumIdKeySpace', ' ']
 
 
+def output_form_converter(token):
+    output = []
+    for t in token:
+        output += ['(' + t[0] + ', ' + t[1] + ')']
+    return output
+
+
 get_next_token()
-print(token_list, error_list)
+token_list = output_form_converter(token_list)
+error_list = output_form_converter(error_list)
+
+scanner_file.write(' '.join(token_list))
+error_file.write(' '.join(error_list))
+# print(token_list, error_list)
