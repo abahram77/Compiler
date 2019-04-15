@@ -199,5 +199,5 @@ token_list = output_form_converter(token_list)
 error_list = output_form_converter(error_list)
 
 scanner_file.write(' '.join(token_list))
-error_file.write(' ,'.join(error_list))
+error_file.write(' '.join(error_list))
 # print(token_list, error_list)
