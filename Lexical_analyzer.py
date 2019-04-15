@@ -2,7 +2,7 @@ import string
 
 file_name = 'testcase_1.txt'
 input_file = open(file_name, mode='r')
-code_string = input_file.read()
+code_string_all = input_file.readlines()
 
 scanner_file_name = './scanner.txt'
 scanner_file = open(scanner_file_name, mode='w')
@@ -177,9 +177,9 @@ def get_next_token():
 
         else:
             if new_state[0] == 'multi_line_comment':
-                error_list += [('invalid comment', '/*')]
+                error_list += [('/*','invalid input')]
             else:
-                error_list += [('invalid input', token)]
+                error_list += [(token,'invalid input')]
 
         token = ''
         valid_token = True
@@ -193,11 +193,21 @@ def output_form_converter(token):
         output += ['(' + t[0] + ', ' + t[1] + ')']
     return output
 
+for i in range(len(code_string_all)):
+    code_string=code_string_all[i]
 
-get_next_token()
-token_list = output_form_converter(token_list)
-error_list = output_form_converter(error_list)
+    get_next_token()
+    token_list = output_form_converter(token_list)
+    error_list = output_form_converter(error_list)
 
-scanner_file.write(' '.join(token_list))
-error_file.write(' '.join(error_list))
+    scanner_file.write(' '.join(token_list))
+    if(len(token_list)!=0):
+        scanner_file.write("\n")
+    error_file.write(' '.join(error_list))
+    if(len(error_list)!=0):
+        error_file.write("\n")
+    token_list=[]
+    error_list=[]
+    code_pointer=0
+
 # print(token_list, error_list)
