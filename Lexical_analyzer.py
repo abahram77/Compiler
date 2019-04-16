@@ -1,6 +1,6 @@
 import string
 
-file_name = 'testcase_1.txt'
+file_name = 'testcase_2.txt'
 input_file = open(file_name, mode='r')
 code_string_all = input_file.readlines()
 
@@ -9,9 +9,11 @@ scanner_file = open(scanner_file_name, mode='w')
 lexical_file_name = './lexical_errors.txt'
 error_file = open(lexical_file_name, mode='w')
 
-# code_string = 'b != a'
 code_pointer = 0
 token = []
+
+scanner_line_iterator = 1
+lexical_error_line_iterator = 1
 symbols = ['{', '}', ';', ':', ',', '(', ')', '&', '*', '=', '+', '%', '^', '|', '/', '>', '<', '~', '[', '[', '"',
            "'", '-', '?']
 dict
@@ -177,9 +179,9 @@ def get_next_token():
 
         else:
             if new_state[0] == 'multi_line_comment':
-                error_list += [('/*','invalid input')]
+                error_list += [('/*', 'invalid input')]
             else:
-                error_list += [(token,'invalid input')]
+                error_list += [(token, 'invalid input')]
 
         token = ''
         valid_token = True
@@ -193,21 +195,22 @@ def output_form_converter(token):
         output += ['(' + t[0] + ', ' + t[1] + ')']
     return output
 
+
 for i in range(len(code_string_all)):
-    code_string=code_string_all[i]
+    code_string = code_string_all[i]
 
     get_next_token()
     token_list = output_form_converter(token_list)
     error_list = output_form_converter(error_list)
 
-    scanner_file.write(' '.join(token_list))
-    if(len(token_list)!=0):
-        scanner_file.write("\n")
-    error_file.write(' '.join(error_list))
-    if(len(error_list)!=0):
-        error_file.write("\n")
-    token_list=[]
-    error_list=[]
-    code_pointer=0
+    if len(token_list) != 0:
+        scanner_file.write(str(scanner_line_iterator) + '. ' + ' '.join(token_list) + '\n')
+    scanner_line_iterator += 1
 
-# print(token_list, error_list)
+    if len(error_list) != 0:
+        error_file.write(str(lexical_error_line_iterator) + '. ' + ' '.join(error_list) + '\n')
+    lexical_error_line_iterator += 1
+    token_list = []
+    error_list = []
+    code_pointer = 0
+

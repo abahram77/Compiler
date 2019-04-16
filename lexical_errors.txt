@@ -1,2 +1,4 @@
-(cd!e, invalid input)
-(@2, invalid input)
+1. (]), invalid input)
+3. (!, invalid input)
+6. (/*, invalid input)
+13. (32c, invalid input)
