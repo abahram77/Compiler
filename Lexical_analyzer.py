@@ -1,6 +1,6 @@
 import string
 
-file_name = 'testcase_2.txt'
+file_name = 'testcase_3.txt'
 input_file = open(file_name, mode='r')
 code_string_all = input_file.readlines()
 
@@ -153,10 +153,10 @@ def multi_line_comment(not_used):
     return ''
 
 
-def get_next_token():
+def get_next_token(init_state):
     global token_list, valid_token, error_list, new_state
-    acceptable_state = [None, ' ']
-    new_state = ['SymNumIdKeySpace', ' ']
+    acceptable_state = [[None, ' ']]
+    new_state = init_state
     token = ''
 
     while code_pointer < len(code_string):
@@ -166,6 +166,8 @@ def get_next_token():
                 token += eval(acceptable_state[0] + "('" + acceptable_state[1] + "')")
             else:
                 acceptable_state = new_state
+                if new_state[0] == 'multi_line_comment':
+                    return new_state[0]
                 break
 
         if valid_token:
@@ -188,6 +190,8 @@ def get_next_token():
         acceptable_state = [None, ' ']
         new_state = ['SymNumIdKeySpace', ' ']
 
+    return new_state[0]
+
 
 def output_form_converter(token):
     output = []
@@ -196,10 +200,14 @@ def output_form_converter(token):
     return output
 
 
+pre_line_state = 'SymNumIdKeySpace'
 for i in range(len(code_string_all)):
     code_string = code_string_all[i]
 
-    get_next_token()
+    if pre_line_state == 'multi_line_comment':
+        pre_line_state = get_next_token(['multi_line_comment', ' '])
+    else:
+        pre_line_state = get_next_token(['SymNumIdKeySpace', ' '])
     token_list = output_form_converter(token_list)
     error_list = output_form_converter(error_list)
 
@@ -214,3 +222,5 @@ for i in range(len(code_string_all)):
     error_list = []
     code_pointer = 0
 
+if pre_line_state == 'multi_line_comment':
+    error_file.write(str(lexical_error_line_iterator) + '. ' + '(invalid comment)')
