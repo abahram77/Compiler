@@ -1,0 +1,10 @@
+void main() 122f /* comment
+	comment
+	comment return 
+a = 23
+12s = 3
+*/ 
+
+return 
+14w
+}
