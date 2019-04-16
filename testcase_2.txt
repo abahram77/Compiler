@@ -1,0 +1,15 @@
+int main(void* argc, void* argv[]){
+	a = 3
+	b ! 4
+	double k == 3 != (var )? sdf 
+	printf(t)
+ /* this is a comment
+    resuming the comment
+    here comment ends */
+
+// another comment
+
+a12 =  34
+32c = a12
+return 0
+}  
