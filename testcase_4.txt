@@ -1,0 +1,12 @@
+int main(){
+    h=2;
+    h!/5=h;
+    h+=2;
+    /*comment here
+
+
+
+    */
+    hello=5;
+    return 0;
+    }

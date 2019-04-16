@@ -1,2 +1,4 @@
-1. (122f, invalid input)
-9. (14w, invalid input)
+1. (#include, invalid input) (stdio.h, invalid input)
+2. (#include, invalid input) (math.h, invalid input)
+11. (\n\nX\t\tY\n, invalid input)
+21. (f\t, invalid input) (f\n, invalid input)

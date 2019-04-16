@@ -1,6 +1,6 @@
 import string
 
-file_name = 'testcase_3.txt'
+file_name = 'testcase_5.txt'
 input_file = open(file_name, mode='r')
 code_string_all = input_file.readlines()
 
@@ -92,7 +92,7 @@ def number(not_used):
         new_state = ['end_of_token', ' ']
         return ''
 
-    if char in digit:
+    if char in digit or char==".":
         code_pointer += 1
         return char
 
