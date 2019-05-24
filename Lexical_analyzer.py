@@ -1,4 +1,6 @@
 import string
+import grammer
+import firstFollows
 
 file_name = 'testcase_6.txt'
 input_file = open(file_name, mode='r')
@@ -185,7 +187,7 @@ def make_next_token():
 
         if valid_token:
             if acceptable_state[0] == 'IdKey':
-                acceptable_state[0] = 'ID'
+                acceptable_state[0] = 'id'
                 if token in key_words:
                     acceptable_state[0] = 'keyword'
             if token != '' and acceptable_state[0] != 'one_line_comment' and acceptable_state[0] \
@@ -230,13 +232,19 @@ def print_tree(depth, state):
 #     return output
 
 # TODO: be replaced
-terminals = ['ID'] + symbols + key_words
-transition_diagram = {'program': [['void', 'E', 'F'], []], 'E': [['ID'], ['(']], 'F': [['(', 'F', ')'], [';']]}
-first = {'program': ['void'], 'E': ['ID', '('], 'F': ['(', ';']}
+terminals = ['id'] + symbols + key_words
+transition_diagram = grammer.get_grammer()
+first = firstFollows.get_first()
+follow = firstFollows.get_follow()
+print("transition", transition_diagram)
+print("first", first)
+print("transition", follow)
+
 for terminal in terminals:
     first[terminal] = [terminal]
+    follow[terminal] = []
 
-stack = ['program']
+stack = ['Program']
 depths = [0]
 
 
@@ -249,10 +257,13 @@ depths = [0]
 
 def parser(token):
     global stack, depths
-    if token == 'EOF':
-        if len(stack) != 0:
-            print(str(code_line) + ' : Syntax Error! Unexpected EndOfFile')
+    print("\nstack is !", stack[::-1], '\n')
+    # if token == 'EOF':
+    #     if len(stack) != 0:
+    #         print(str(code_line) + ' : Syntax Error! Unexpected EndOfFile')
 
+        # return True
+    if len(stack) == 1 and stack[0] == 'EOF':
         return True
 
     state = stack.pop()
@@ -268,20 +279,20 @@ def parser(token):
         next_token_ = convert_token(next_token_)
         return parser(next_token_)
 
-    for way in transition_diagram.get(state):
-        if way == [] or token in first.get(way[0]) or ('ep' in first.get(way[0]) and token in follow.get(way[0])):
-            stack += way[::-1]
-            depths += [depth + 1 for i in range(len(way))]
-            return parser(token)
+    if token in first.get(state) or token in follow.get(state) :
+        for way in transition_diagram.get(state):
+            if way == [] or token in first.get(way[0]) or ('ep' in first.get(way[0]) and token in follow.get(way[0])):
+                stack += way[::-1]
+                depths += [depth + 1 for i in range(len(way))]
+                return parser(token)
 
-    for way in transition_diagram(way[0]):
-        if token in follow.get(way[0]):
+        if token in follow.get(state):
             print(str(code_line) + ' : Syntax Error! Missing ' + state)
-            stack += way[::-1]
-            depths += [depth + 1 for i in range(len(way))]
+            # stack += way[::-1]
+            # depths += [depth + 1 for i in range(len(way))]
             return parser(token)
 
-    print(str(code_line) + ' : Syntax Error! Unexpected ' + terminal)
+    print(str(code_line) + ' : Syntax Error! Unexpected ' + token)
     stack += [state]
     next_token_ = get_next_token()[0]
     next_token_ = convert_token(next_token_)
