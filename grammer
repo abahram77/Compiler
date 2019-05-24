@@ -1,0 +1,77 @@
+Program -> Declarationlist eof
+Declarationlist -> Declarationlistprime
+Declarationlistprime -> Declaration Declarationlistprime
+Declarationlistprime ->
+Declaration -> Typespecifier id V1
+V1 -> Prime
+V1 -> ( Params ) Compoundstmt
+Prime -> ;
+Prime -> oBrac num cBrac ;
+Typespecifier -> int
+Typespecifier -> void
+Params -> void Paramlist1
+Paramlist1 ->
+Paramlist1 -> id Prime1 Paramlistprime
+Paramlistprime -> comma Param Paramlistprime
+Paramlistprime ->
+Param -> Typespecifier id Prime1
+Prime1 -> oBrac cBrac
+Prime1 ->
+Compoundstmt -> oAcl Declarationlist Statementlist cAcl
+Statementlist -> Statementlistprime
+Statementlistprime -> Statement Statementlistprime
+Statementlistprime ->
+Statement -> Expressionstmt
+Statement -> Compoundstmt
+Statement -> Selectionstmt
+Statement -> Iterationstmt
+Statement -> Returnstmt
+Statement -> Switchstmt
+Expressionstmt -> Expression ;
+Expressionstmt -> continue ;
+Expressionstmt -> break ;
+Expressionstmt -> ;
+Selectionstmt -> if ( Expression ) Statement else Statement
+Iterationstmt -> while ( Expression ) Statement
+Returnstmt -> return Prime2
+Prime2 -> Expression ;
+Prime2 -> ;
+Switchstmt -> switch ( Expression ) oAcl Casestmtsprime Defaultstmt cAcl
+Casestmtsprime -> Casestmt Casestmtsprime
+Casestmtsprime ->
+Casestmt -> case num : Statementlist
+Defaultstmt -> default : Statementlist
+Defaultstmt ->
+Expression -> + Factor Termprime Additiveexpressionprime Var2
+Expression -> minus Factor Termprime Additiveexpressionprime Var2
+Expression -> id Var4
+Var4 -> Var3 equal Expression
+Var4 -> Factor Termprime Additiveexpressionprime Var2
+Var3 -> oBrac Expression cBrac
+Var3 ->
+Var2 -> Relop Additiveexpression
+Var2 ->
+Relop -> lt
+Relop -> ~
+Additiveexpression -> Term Additiveexpressionprime
+Additiveexpressionprime -> Addop Term Additiveexpressionprime
+Additiveexpressionprime ->
+Addop -> +
+Addop -> minus
+Term -> Signedfactor Termprime
+Termprime -> * Signedfactor Termprime
+Termprime ->
+Signedfactor -> Factor
+Signedfactor -> + Factor
+Signedfactor -> minus Factor
+Factor -> ( Expression )
+Factor -> id Var1
+Var1 ->
+Var1 -> oBrac Expression cBrac
+Var1 -> ( Args )
+Factor -> num
+Args -> Arglist
+Args ->
+Arglist -> Expression Arglistprime
+Arglistprime -> comma Expression Arglistprime
+Arglistprime ->

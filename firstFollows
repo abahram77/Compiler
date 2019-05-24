@@ -1,0 +1,41 @@
+Program	eof int void		no	yes
+Declarationlistprime	int void	eof continue break ; oAcl if while return switch + minus id cAcl	yes	no
+Declaration	int void	int void eof continue break ; oAcl if while return switch + minus id cAcl	no	no
+V1	( ; oBrac	int void eof continue break ; oAcl if while return switch + minus id cAcl	no	no
+Prime	; oBrac	int void eof continue break ; oAcl if while return switch + minus id cAcl	no	no
+Params	void	)	no	no
+Paramlist1	id	)	yes	no
+Paramlistprime	comma	)	yes	no
+Param	int void	comma )	no	no
+Typespecifier	int void	id	no	no
+Prime1	oBrac	comma )	yes	no
+Declarationlist	int void	eof continue break ; oAcl if while return switch + minus id cAcl	yes	no
+Statementlistprime	continue break ; oAcl if while return switch + minus id	case default cAcl	yes	no
+Compoundstmt	oAcl	case default else int void eof continue break ; oAcl if while return switch + minus id cAcl	no	no
+Expressionstmt	continue break ; + minus id	case default continue break ; oAcl if while return switch + minus id else cAcl	no	no
+Selectionstmt	if	case default continue break ; oAcl if while return switch + minus id else cAcl	no	no
+Iterationstmt	while	case default continue break ; oAcl if while return switch + minus id else cAcl	no	no
+Statement	continue break ; oAcl if while return switch + minus id	case default continue break ; oAcl if while return switch + minus id else cAcl	no	no
+Returnstmt	return	case default continue break ; oAcl if while return switch + minus id else cAcl	no	no
+Prime2	; + minus id	case default continue break ; oAcl if while return switch + minus id else cAcl	no	no
+Switchstmt	switch	case default continue break ; oAcl if while return switch + minus id else cAcl	no	no
+Casestmtsprime	case	default cAcl	yes	no
+Casestmt	case	case default cAcl	no	no
+Defaultstmt	default	cAcl	yes	no
+Statementlist	continue break ; oAcl if while return switch + minus id	case default cAcl	yes	no
+Var4	equal oBrac ( id num	; ) cBrac comma	no	no
+Var3	oBrac	equal	yes	no
+Var2	lt ~	; ) cBrac comma	yes	no
+Relop	lt ~	+ minus ( id num	no	no
+Additiveexpression	+ minus ( id num	; ) cBrac comma	no	no
+Additiveexpressionprime	+ minus	lt ~ ; ) cBrac comma	yes	no
+Addop	+ minus	+ minus ( id num	no	no
+Term	+ minus ( id num	+ minus lt ~ ; ) cBrac comma	no	no
+Termprime	*	+ minus lt ~ ; ) cBrac comma	yes	no
+Signedfactor	+ minus ( id num	* + minus lt ~ ; ) cBrac comma	no	no
+Factor	( id num	* + minus lt ~ ; ) cBrac comma	no	no
+Var1	oBrac (	* + minus lt ~ ; ) cBrac comma	yes	no
+Args	+ minus id	)	yes	no
+Arglist	+ minus id	)	no	no
+Expression	+ minus id	; ) cBrac comma	no	no
+Arglistprime	comma	)	yes	no
