@@ -1,8 +1,11 @@
 import string
 import grammer
 import firstFollows
+import sys
 
-file_name = 'testcase_6.txt'
+sys.setrecursionlimit(10000000)
+
+file_name = 'testcase_7.txt'
 input_file = open(file_name, mode='r')
 code_string_all = input_file.read()
 
@@ -225,13 +228,6 @@ def print_tree(depth, state):
     print(state)
 
 
-# def output_form_converter(token):
-#     output = []
-#     for t in token:
-#         output += ['(' + t[0] + ', ' + t[1] + ')']
-#     return output
-
-# TODO: be replaced
 terminals = ['id', 'num'] + symbols + key_words
 transition_diagram = grammer.get_grammer()
 first = firstFollows.get_first()
@@ -248,27 +244,19 @@ stack = ['Program']
 depths = [0]
 
 
-# token = get_next_token()
-# while token != [('EOF', 'EOF')]:
-#     scanner_file.write(str(code_line) + str(token[0]) + '\n')
-#     token = get_next_token()
-
-# TODO: scanner and error file must be separated and written correctly
-
 def parser(token):
     global stack, depths
     print("stack is !", stack[::-1])
-    # if token == 'EOF':
-    #     if len(stack) != 0:
-    #         print(str(code_line) + ' : Syntax Error! Unexpected EndOfFile')
+    if token == 'EOF' and len(stack) > 1:
+        print(str(code_line) + 'Malformed Input')
+        return False
 
-        # return True
     if len(stack) == 1 and stack[0] == 'EOF':
         return True
 
     state = stack.pop()
     depth = depths.pop()
-    # print_tree(depth, state)
+    print_tree(depth, state)
 
     if state in terminals:
         if state != token:
@@ -278,10 +266,8 @@ def parser(token):
         next_token_ = get_next_token()[0]
         next_token_ = convert_token(next_token_)
         return parser(next_token_)
-
-    if token in first.get(state) or token in follow.get(state) :
+    if token in first.get(state) or token in follow.get(state):
         for way in transition_diagram.get(state):
-            # print("this this" ,way)
             if way == [] or token in first.get(way[0]) or ('ep' in first.get(way[0]) and token in follow.get(way[0])):
                 stack += way[::-1]
                 depths += [depth + 1 for i in range(len(way))]
@@ -289,8 +275,6 @@ def parser(token):
 
         if token in follow.get(state):
             print(str(code_line) + ' : Syntax Error! Missing ' + state)
-            # stack += way[::-1]
-            # depths += [depth + 1 for i in range(len(way))]
             return parser(token)
 
     print(str(code_line) + ' : Syntax Error! Unexpected ' + token)
