@@ -14,7 +14,7 @@ code_pointer = 0
 code_line = 1
 symbols = ['{', '}', ';', ':', ',', '(', ')', '&', '*', '=', '+', '%', '^', '|', '/', '>', '<', '~', '[', '[', '"',
            "'", '-', '?']
-dict
+
 symbol_permutations = {'&': ['&', '='], '=': ['='], '+': ['+', '='], '-': ['-', '='], '%': ['='], '*': ['*', '='],
                        '|': ['|', '='], '/': ['=', '/', '*'], '>': ['>', '='], '<': ['<', '='], '~': ['='], '^': ['='],
                        '>>': ['='], '<<': ['='], '{': [], '}': [], ':': [], ';': [], ',': [], '(': [], ')': [],
@@ -216,10 +216,12 @@ def convert_token(token):
         return token[1]
     return token[0]
 
+
 def print_tree(depth, state):
     for i in range(depth):
         print('|', end='')
     print(state)
+
 
 # def output_form_converter(token):
 #     output = []
@@ -233,6 +235,7 @@ transition_diagram = {'program': [['void', 'E', 'F'], []], 'E': [['ID'], ['(']],
 first = {'program': ['void'], 'E': ['ID', '('], 'F': ['(', ';']}
 for terminal in terminals:
     first[terminal] = [terminal]
+
 stack = ['program']
 depths = [0]
 
@@ -246,34 +249,43 @@ depths = [0]
 
 def parser(token):
     global stack, depths
-    # next_token = get_next_token()[0]
-    # while next_token != ('EOF', 'EOF'):
-    # token = convert_token(next_token)
     if token == 'EOF':
+        if len(stack) != 0:
+            print(str(code_line) + ' : Syntax Error! Unexpected EndOfFile')
+
         return True
+
     state = stack.pop()
     depth = depths.pop()
     print_tree(depth, state)
 
-    if state in terminals and state == token:
-        next_token = get_next_token()[0]
-        next_token = convert_token(next_token)
-        # print("just removed")
-        return parser(next_token)
-
-    # print("waiting to be added", '<'+token+'>')
-    for way in transition_diagram.get(state):
-        # print(first.get(way[0]))
-        if token in first.get(way[0]):
-            stack += way[::-1]
-            depths += [depth+1 for i in range(len(way))]
-
-            # print(stack[::-1])
-            # print(" nothing added\n")
-
+    if state in terminals:
+        if state != token:
+            print(str(code_line) + ' : Syntax Error! Missing ' + state)
             return parser(token)
 
-    return False
+        next_token_ = get_next_token()[0]
+        next_token_ = convert_token(next_token_)
+        return parser(next_token_)
+
+    for way in transition_diagram.get(state):
+        if way == [] or token in first.get(way[0]) or ('ep' in first.get(way[0]) and token in follow.get(way[0])):
+            stack += way[::-1]
+            depths += [depth + 1 for i in range(len(way))]
+            return parser(token)
+
+    for way in transition_diagram(way[0]):
+        if token in follow.get(way[0]):
+            print(str(code_line) + ' : Syntax Error! Missing ' + state)
+            stack += way[::-1]
+            depths += [depth + 1 for i in range(len(way))]
+            return parser(token)
+
+    print(str(code_line) + ' : Syntax Error! Unexpected ' + terminal)
+    stack += [state]
+    next_token_ = get_next_token()[0]
+    next_token_ = convert_token(next_token_)
+    return parser(next_token_)
 
 
 next_token = get_next_token()[0]
