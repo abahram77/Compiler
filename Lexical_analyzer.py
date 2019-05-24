@@ -54,7 +54,7 @@ def SymNumIdKeySpace(not_used):
         return ''
 
     if char in digit:
-        new_state = ['number', ' ']
+        new_state = ['num', ' ']
         return char
 
     if char in letter:
@@ -87,7 +87,7 @@ def IdKey(not_used):
     return char
 
 
-def number(not_used):
+def num(not_used):
     global new_state, code_pointer, valid_token, code_line
     char = code_string_all[code_pointer]
 
@@ -257,7 +257,7 @@ depths = [0]
 
 def parser(token):
     global stack, depths
-    print("\nstack is !", stack[::-1], '\n')
+    print("stack is !", stack[::-1])
     # if token == 'EOF':
     #     if len(stack) != 0:
     #         print(str(code_line) + ' : Syntax Error! Unexpected EndOfFile')
@@ -268,7 +268,7 @@ def parser(token):
 
     state = stack.pop()
     depth = depths.pop()
-    print_tree(depth, state)
+    # print_tree(depth, state)
 
     if state in terminals:
         if state != token:
