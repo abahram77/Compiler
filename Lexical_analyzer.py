@@ -294,6 +294,7 @@ def parser(token):
 
     print(str(code_line) + ' : Syntax Error! Unexpected ' + token)
     stack += [state]
+    depths += [depth]
     next_token_ = get_next_token()[0]
     next_token_ = convert_token(next_token_)
     return parser(next_token_)
