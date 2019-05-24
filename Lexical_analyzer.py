@@ -1,6 +1,6 @@
 import string
 
-file_name = 'testcase_3.txt'
+file_name = 'testcase_6.txt'
 input_file = open(file_name, mode='r')
 code_string_all = input_file.read()
 
@@ -211,14 +211,71 @@ def get_next_token():
     return res
 
 
-def output_form_converter(token):
-    output = []
-    for t in token:
-        output += ['(' + t[0] + ', ' + t[1] + ')']
-    return output
+def convert_token(token):
+    if token[0] == 'symbol' or token[0] == 'keyword':
+        return token[1]
+    return token[0]
+
+def print_tree(depth, state):
+    for i in range(depth):
+        print('|', end='')
+    print(state)
+
+# def output_form_converter(token):
+#     output = []
+#     for t in token:
+#         output += ['(' + t[0] + ', ' + t[1] + ')']
+#     return output
+
+# TODO: be replaced
+terminals = ['ID'] + symbols + key_words
+transition_diagram = {'program': [['void', 'E', 'F'], []], 'E': [['ID'], ['(']], 'F': [['(', 'F', ')'], [';']]}
+first = {'program': ['void'], 'E': ['ID', '('], 'F': ['(', ';']}
+for terminal in terminals:
+    first[terminal] = [terminal]
+stack = ['program']
+depths = [0]
 
 
-token = get_next_token()
-while token != [('EOF', 'EOF')]:
-    scanner_file.write(str(code_line) + str(token[0]) + '\n')
-    token = get_next_token()
+# token = get_next_token()
+# while token != [('EOF', 'EOF')]:
+#     scanner_file.write(str(code_line) + str(token[0]) + '\n')
+#     token = get_next_token()
+
+# TODO: scanner and error file must be separated and written correctly
+
+def parser(token):
+    global stack, depths
+    # next_token = get_next_token()[0]
+    # while next_token != ('EOF', 'EOF'):
+    # token = convert_token(next_token)
+    if token == 'EOF':
+        return True
+    state = stack.pop()
+    depth = depths.pop()
+    print_tree(depth, state)
+
+    if state in terminals and state == token:
+        next_token = get_next_token()[0]
+        next_token = convert_token(next_token)
+        # print("just removed")
+        return parser(next_token)
+
+    # print("waiting to be added", '<'+token+'>')
+    for way in transition_diagram.get(state):
+        # print(first.get(way[0]))
+        if token in first.get(way[0]):
+            stack += way[::-1]
+            depths += [depth+1 for i in range(len(way))]
+
+            # print(stack[::-1])
+            # print(" nothing added\n")
+
+            return parser(token)
+
+    return False
+
+
+next_token = get_next_token()[0]
+next_token = convert_token(next_token)
+parser(next_token)

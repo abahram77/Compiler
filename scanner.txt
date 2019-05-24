@@ -1,8 +1,0 @@
-1('keyword', 'void')
-1('ID', 'main')
-1('symbol', '(')
-1('symbol', ')')
-1('122f', 'invalid input')
-8('keyword', 'return')
-9('14w', 'invalid input')
-10('symbol', '}')
