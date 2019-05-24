@@ -42,15 +42,19 @@ Casestmtsprime ->
 Casestmt -> case num : Statementlist
 Defaultstmt -> default : Statementlist
 Defaultstmt ->
-Expression -> + Factor Termprime Additiveexpressionprime Var2
-Expression -> minus Factor Termprime Additiveexpressionprime Var2
-Expression -> id Var4
-Var4 -> Var3 equal Expression
-Var4 -> Factor Termprime Additiveexpressionprime Var2
-Var3 -> oBrac Expression cBrac
-Var3 ->
-Var2 -> Relop Additiveexpression
-Var2 ->
+Expression -> id CCC
+CCC -> AAA DDD
+DDD -> equal Expression
+DDD -> Termprime Additiveexpressionprime BBB
+CCC -> ( Args ) Termprime Additiveexpressionprime BBB
+Expression -> ( Expression ) Termprime Additiveexpressionprime BBB
+Expression -> num Termprime Additiveexpressionprime BBB
+Expression -> + Factor Termprime Additiveexpressionprime BBB
+Expression -> minus Factor Termprime Additiveexpressionprime BBB
+AAA ->
+AAA -> oBrac Expression cBrac
+BBB ->
+BBB -> Relop Additiveexpression
 Relop -> lt
 Relop -> ~
 Additiveexpression -> Term Additiveexpressionprime
@@ -66,8 +70,7 @@ Signedfactor -> + Factor
 Signedfactor -> minus Factor
 Factor -> ( Expression )
 Factor -> id Var1
-Var1 ->
-Var1 -> oBrac Expression cBrac
+Var1 -> AAA
 Var1 -> ( Args )
 Factor -> num
 Args -> Arglist
