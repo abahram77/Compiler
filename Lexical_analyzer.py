@@ -5,14 +5,14 @@ import sys
 
 sys.setrecursionlimit(10000000)
 
-file_name = 'testcase_7.txt'
+file_name = './test_case/testcase_7.txt'
 input_file = open(file_name, mode='r')
 code_string_all = input_file.read()
 
-scanner_file_name = './scanner.txt'
-scanner_file = open(scanner_file_name, mode='w')
-lexical_file_name = './lexical_errors.txt'
-error_file = open(lexical_file_name, mode='w')
+parser_file_name = './res/parser.txt'
+parser_file = open(parser_file_name, mode='w')
+error_file_name = './res/error.txt'
+error_file = open(error_file_name, mode='w')
 
 code_pointer = 0
 
@@ -210,9 +210,12 @@ def make_next_token():
 
 
 def get_next_token():
+    global code_line
     res = None
     while res is None:
         res = make_next_token()
+    if res[0][1] == 'invalid input':
+        error_file.write(str(code_line) + ' : Lexical Error! invalid input ' + res[0][0] + '\n')
     return res
 
 
@@ -224,8 +227,8 @@ def convert_token(token):
 
 def print_tree(depth, state):
     for i in range(depth):
-        print('|', end='')
-    print(state)
+        parser_file.write('|')
+    parser_file.write(state + '\n')
 
 
 terminals = ['id', 'num'] + symbols + key_words
@@ -234,7 +237,7 @@ first = firstFollows.get_first()
 follow = firstFollows.get_follow()
 print("transition", transition_diagram)
 print("first", first)
-print("transition", follow)
+print("follow", follow)
 
 for terminal in terminals:
     first[terminal] = [terminal]
@@ -244,11 +247,12 @@ stack = ['Program']
 depths = [0]
 
 
+
 def parser(token):
     global stack, depths
     print("stack is !", stack[::-1])
     if token == 'EOF' and len(stack) > 1:
-        print(str(code_line) + 'Malformed Input')
+        error_file.write(str(code_line) + ' : Syntax Error! Malformed Input\n')
         return False
 
     if len(stack) == 1 and stack[0] == 'EOF':
@@ -260,24 +264,26 @@ def parser(token):
 
     if state in terminals:
         if state != token:
-            print(str(code_line) + ' : Syntax Error! Missing ' + state)
+            error_file.write(str(code_line) + ' : Syntax Error! Missing ' + state + '\n')
             return parser(token)
 
         next_token_ = get_next_token()[0]
         next_token_ = convert_token(next_token_)
         return parser(next_token_)
+    # print('error', state, first.get(state), follow.get(state))
     if token in first.get(state) or token in follow.get(state):
         for way in transition_diagram.get(state):
+            # print("this", first.get(way[0]), way)
             if way == [] or token in first.get(way[0]) or ('ep' in first.get(way[0]) and token in follow.get(way[0])):
                 stack += way[::-1]
                 depths += [depth + 1 for i in range(len(way))]
                 return parser(token)
 
         if token in follow.get(state):
-            print(str(code_line) + ' : Syntax Error! Missing ' + state)
+            error_file.write(str(code_line) + ' : Syntax Error! Missing ' + state + '\n')
             return parser(token)
 
-    print(str(code_line) + ' : Syntax Error! Unexpected ' + token)
+    error_file.write(str(code_line) + ' : Syntax Error! Unexpected ' + token + '\n')
     stack += [state]
     depths += [depth]
     next_token_ = get_next_token()[0]

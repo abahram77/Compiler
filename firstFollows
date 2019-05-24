@@ -3,12 +3,13 @@ Declarationlistprime	int void	eof continue break ; oAcl if while return switch i
 Declaration	int void	int void eof continue break ; oAcl if while return switch id ( num + minus cAcl	no	no
 V1	( ; oBrac	int void eof continue break ; oAcl if while return switch id ( num + minus cAcl	no	no
 Prime	; oBrac	int void eof continue break ; oAcl if while return switch id ( num + minus cAcl	no	no
-Params	void	)	no	no
-Paramlist1	id	)	yes	no
-Paramlistprime	comma	)	yes	no
-Param	int void	comma )	no	no
+Params	paramlist void	)	no	no
+Paramlist	param		no	no
+AAAA	comma		yes	no
+Paramlistprime	comma		yes	no
+Param	int void	comma	no	no
 Typespecifier	int void	id	no	no
-Prime1	oBrac	comma )	yes	no
+Prime1	oBrac	comma	yes	no
 Declarationlist	int void	eof continue break ; oAcl if while return switch id ( num + minus cAcl	yes	no
 Statementlistprime	continue break ; oAcl if while return switch id ( num + minus	case default cAcl	yes	no
 Compoundstmt	oAcl	case default else int void eof continue break ; oAcl if while return switch id ( num + minus cAcl	no	no

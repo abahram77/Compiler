@@ -1,0 +1,19 @@
+int foo(int d, int e){
+int f;
+}
+/*
+void foow(int k[2]){
+
+return k[0] + k[1];
+}
+int fff[2];
+fff[0] = d;
+b = e+f;
+
+while (d > 0){
+d = d -1;
+if (d == 3)
+break;
+}
+return f+b;
+}*/	

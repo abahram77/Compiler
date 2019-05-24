@@ -1,0 +1,10 @@
+Program
+|Declarationlist
+||Declarationlistprime
+|||Declaration
+||||Typespecifier
+|||||int
+||||id
+||||V1
+||||V1
+|||Declarationlistprime

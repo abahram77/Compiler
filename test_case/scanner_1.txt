@@ -1,0 +1,3 @@
+(keyword, void) (ID, main) (symbol, () (symbol, ))
+(keyword, return)
+(symbol, =) (number, 23.3) (symbol, })

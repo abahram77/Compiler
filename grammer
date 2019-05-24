@@ -9,9 +9,11 @@ Prime -> ;
 Prime -> oBrac num cBrac ;
 Typespecifier -> int
 Typespecifier -> void
-Params -> void Paramlist1
-Paramlist1 ->
-Paramlist1 -> id Prime1 Paramlistprime
+Params -> paramlist
+Params -> void
+Paramlist -> param AAAA
+AAAA ->
+AAAA -> comma   AAAA
 Paramlistprime -> comma Param Paramlistprime
 Paramlistprime ->
 Param -> Typespecifier id Prime1
