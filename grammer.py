@@ -64,4 +64,3 @@ def get_grammer() :
 
             new_dict[i].append(list)
     return new_dict
-
