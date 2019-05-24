@@ -232,7 +232,7 @@ def print_tree(depth, state):
 #     return output
 
 # TODO: be replaced
-terminals = ['id'] + symbols + key_words
+terminals = ['id', 'num'] + symbols + key_words
 transition_diagram = grammer.get_grammer()
 first = firstFollows.get_first()
 follow = firstFollows.get_follow()
@@ -281,6 +281,7 @@ def parser(token):
 
     if token in first.get(state) or token in follow.get(state) :
         for way in transition_diagram.get(state):
+            # print("this this" ,way)
             if way == [] or token in first.get(way[0]) or ('ep' in first.get(way[0]) and token in follow.get(way[0])):
                 stack += way[::-1]
                 depths += [depth + 1 for i in range(len(way))]
