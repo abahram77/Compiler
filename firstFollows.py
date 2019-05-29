@@ -96,3 +96,4 @@ def get_follow() :
                 new_dict[i].append(j)
     return new_dict
 
+print(get_first())

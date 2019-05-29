@@ -1,82 +1,87 @@
-Program -> Declarationlist eof
-Declarationlist -> Declarationlistprime
-Declarationlistprime -> Declaration Declarationlistprime
-Declarationlistprime ->
-Declaration -> Typespecifier id V1
-V1 -> Prime
-V1 -> ( Params ) Compoundstmt
-Prime -> ;
-Prime -> oBrac num cBrac ;
-Typespecifier -> int
-Typespecifier -> void
-Params -> paramlist
-Params -> void
-Paramlist -> param AAAA
-AAAA ->
-AAAA -> comma   AAAA
-Paramlistprime -> comma Param Paramlistprime
-Paramlistprime ->
-Param -> Typespecifier id Prime1
-Prime1 -> oBrac cBrac
-Prime1 ->
-Compoundstmt -> oAcl Declarationlist Statementlist cAcl
-Statementlist -> Statementlistprime
-Statementlistprime -> Statement Statementlistprime
-Statementlistprime ->
-Statement -> Expressionstmt
-Statement -> Compoundstmt
-Statement -> Selectionstmt
-Statement -> Iterationstmt
-Statement -> Returnstmt
-Statement -> Switchstmt
-Expressionstmt -> Expression ;
-Expressionstmt -> continue ;
-Expressionstmt -> break ;
-Expressionstmt -> ;
-Selectionstmt -> if ( Expression ) Statement else Statement
-Iterationstmt -> while ( Expression ) Statement
-Returnstmt -> return Prime2
-Prime2 -> Expression ;
-Prime2 -> ;
-Switchstmt -> switch ( Expression ) oAcl Casestmtsprime Defaultstmt cAcl
-Casestmtsprime -> Casestmt Casestmtsprime
-Casestmtsprime ->
-Casestmt -> case num : Statementlist
-Defaultstmt -> default : Statementlist
-Defaultstmt ->
-Expression -> id CCC
-CCC -> AAA DDD
-DDD -> equal Expression
-DDD -> Termprime Additiveexpressionprime BBB
-CCC -> ( Args ) Termprime Additiveexpressionprime BBB
-Expression -> ( Expression ) Termprime Additiveexpressionprime BBB
-Expression -> num Termprime Additiveexpressionprime BBB
-Expression -> + Factor Termprime Additiveexpressionprime BBB
-Expression -> minus Factor Termprime Additiveexpressionprime BBB
-AAA ->
-AAA -> oBrac Expression cBrac
-BBB ->
-BBB -> Relop Additiveexpression
+Program -> DeclarationList eof
+DeclarationList -> DeclarationList1
+DeclarationList1 -> Declaration DeclarationList1
+DeclarationList1 ->
+Declaration -> TypeSpecifier FTypeSpecifier2
+FTypeSpecifier2 -> id Var4
+Var4 -> Var1
+Var4 -> ( Params ) CompoundStmt
+Var1 -> ;
+Var1 -> oBrac num cBrac ;
+TypeSpecifier -> void
+TypeSpecifier -> int
+Params -> int FTypeSpecifier1 ParamList1
+Params -> void FParam
+FParam -> FTypeSpecifier1 ParamList1
+FParam ->
+ParamList1 -> comma Param ParamList1
+ParamList1 ->
+Param -> TypeSpecifier FTypeSpecifier1
+FTypeSpecifier1 -> id Var2
+Var2 ->
+Var2 -> oBrac cBrac
+CompoundStmt -> oAcl DeclarationList StatementList cAcl
+StatementList -> StatementList1
+StatementList1 -> Statement StatementList1
+StatementList1 ->
+Statement -> ExpressionStmt
+Statement -> CompoundStmt
+Statement -> SelectionStmt
+Statement -> IterationStmt
+Statement -> ReturnStmt
+Statement -> SwitchStmt
+ExpressionStmt -> Expression ;
+ExpressionStmt -> continue ;
+ExpressionStmt -> break ;
+ExpressionStmt -> ;
+SelectionStmt -> if ( Expression ) Statement else Statement
+IterationStmt -> while ( Expression ) Statement
+ReturnStmt -> return Freturn
+Freturn -> ;
+Freturn -> Expression ;
+SwitchStmt -> switch ( Expression ) oAcl CaseStmts DefaultStmt cAcl
+CaseStmts -> CaseStmts1
+CaseStmts1 -> CaseStmt CaseStmts1
+CaseStmts1 ->
+CaseStmt -> case num : StatementList
+DefaultStmt -> default : StatementList
+DefaultStmt ->
+Expression -> id FExpr
+Expression -> Term2 AdditiveExpression1 FAdditiveExpression
+FExpr -> Var FExpr1
+FExpr -> ( Args ) Term1 AdditiveExpression1 FAdditiveExpression
+FExpr1 -> equal Expression
+FExpr1 -> Term1 AdditiveExpression1 FAdditiveExpression
+Var ->
+Var -> oBrac Expression cBrac
+FAdditiveExpression -> Relop AdditiveExpression
+FAdditiveExpression ->
 Relop -> lt
 Relop -> ~
-Additiveexpression -> Term Additiveexpressionprime
-Additiveexpressionprime -> Addop Term Additiveexpressionprime
-Additiveexpressionprime ->
+AdditiveExpression -> Term AdditiveExpression1
+AdditiveExpression1 -> Addop Term AdditiveExpression1
+AdditiveExpression1 ->
 Addop -> +
 Addop -> minus
-Term -> Signedfactor Termprime
-Termprime -> * Signedfactor Termprime
-Termprime ->
-Signedfactor -> Factor
-Signedfactor -> + Factor
-Signedfactor -> minus Factor
+Term -> SignedFactor Term1
+Term1 -> * SignedFactor Term1
+Term1 ->
+Term2 -> SignedFactor2 Term1
+SignedFactor -> Factor
+SignedFactor -> + Factor
+SignedFactor -> minus Factor
+SignedFactor2 -> Factor2
+SignedFactor2 -> + Factor
+SignedFactor2 -> minus Factor
 Factor -> ( Expression )
-Factor -> id Var1
-Var1 -> AAA
-Var1 -> ( Args )
+Factor -> id Var3
 Factor -> num
-Args -> Arglist
+Factor2 -> ( Expression )
+Factor2 -> num
+Var3 -> Var
+Var3 -> ( Args )
+Args -> ArgList
 Args ->
-Arglist -> Expression Arglistprime
-Arglistprime -> comma Expression Arglistprime
-Arglistprime ->
+ArgList -> Expression ArgList1
+ArgList1 -> comma Expression ArgList1
+ArgList1 ->

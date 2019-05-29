@@ -17,7 +17,7 @@ error_file = open(error_file_name, mode='w')
 code_pointer = 0
 
 code_line = 1
-symbols = ['{', '}', ';', ':', ',', '(', ')', '&', '*', '=', '+', '%', '^', '|', '/', '>', '<', '~', '[', '[', '"',
+symbols = ['{', '}', ';', ':', ',', '(', ')', '&', '*', '=', '+', '%', '^', '|', '/', '>', '<', '~', '[', ']', '"',
            "'", '-', '?']
 
 symbol_permutations = {'&': ['&', '='], '=': ['='], '+': ['+', '='], '-': ['-', '='], '%': ['='], '*': ['*', '='],
@@ -242,7 +242,10 @@ print("follow", follow)
 for terminal in terminals:
     first[terminal] = [terminal]
     follow[terminal] = []
-
+    ########
+    first["=="]=["=="]
+    follow["=="]=[]
+    ########
 stack = ['Program']
 depths = [0]
 
@@ -251,9 +254,9 @@ depths = [0]
 def parser(token):
     global stack, depths
     print("stack is !", stack[::-1])
-    if token == 'EOF' and len(stack) > 1:
-        error_file.write(str(code_line) + ' : Syntax Error! Malformed Input\n')
-        return False
+    # if token == 'EOF' and len(stack) > 1:
+    #     error_file.write(str(code_line) + ' : Syntax Error! Malformed Input\n')
+    #     return False
 
     if len(stack) == 1 and stack[0] == 'EOF':
         return True
@@ -262,7 +265,7 @@ def parser(token):
     depth = depths.pop()
     print_tree(depth, state)
 
-    if state in terminals:
+    if state in terminals or state == "==":
         if state != token:
             error_file.write(str(code_line) + ' : Syntax Error! Missing ' + state + '\n')
             return parser(token)

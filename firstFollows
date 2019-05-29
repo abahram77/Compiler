@@ -1,43 +1,48 @@
-Program	eof int void		no	yes
-Declarationlistprime	int void	eof continue break ; oAcl if while return switch id ( num + minus cAcl	yes	no
-Declaration	int void	int void eof continue break ; oAcl if while return switch id ( num + minus cAcl	no	no
-V1	( ; oBrac	int void eof continue break ; oAcl if while return switch id ( num + minus cAcl	no	no
-Prime	; oBrac	int void eof continue break ; oAcl if while return switch id ( num + minus cAcl	no	no
-Params	paramlist void	)	no	no
-Paramlist	param		no	no
-AAAA	comma		yes	no
-Paramlistprime	comma		yes	no
-Param	int void	comma	no	no
-Typespecifier	int void	id	no	no
-Prime1	oBrac	comma	yes	no
-Declarationlist	int void	eof continue break ; oAcl if while return switch id ( num + minus cAcl	yes	no
-Statementlistprime	continue break ; oAcl if while return switch id ( num + minus	case default cAcl	yes	no
-Compoundstmt	oAcl	case default else int void eof continue break ; oAcl if while return switch id ( num + minus cAcl	no	no
-Expressionstmt	continue break ; id ( num + minus	case default continue break ; oAcl if while return switch id ( num + minus else cAcl	no	no
-Selectionstmt	if	case default continue break ; oAcl if while return switch id ( num + minus else cAcl	no	no
-Iterationstmt	while	case default continue break ; oAcl if while return switch id ( num + minus else cAcl	no	no
-Statement	continue break ; oAcl if while return switch id ( num + minus	case default continue break ; oAcl if while return switch id ( num + minus else cAcl	no	no
-Returnstmt	return	case default continue break ; oAcl if while return switch id ( num + minus else cAcl	no	no
-Prime2	; id ( num + minus	case default continue break ; oAcl if while return switch id ( num + minus else cAcl	no	no
-Switchstmt	switch	case default continue break ; oAcl if while return switch id ( num + minus else cAcl	no	no
-Casestmtsprime	case	default cAcl	yes	no
-Casestmt	case	case default cAcl	no	no
-Defaultstmt	default	cAcl	yes	no
-Statementlist	continue break ; oAcl if while return switch id ( num + minus	case default cAcl	yes	no
-CCC	( oBrac equal * + minus lt ~	; cBrac ) comma	yes	no
-DDD	equal * + minus lt ~	; cBrac ) comma	yes	no
-BBB	lt ~	; cBrac ) comma	yes	no
+Program	eof void int		no	yes
+DeclarationList1	void int	eof continue break ; oAcl if while return switch id + minus ( num cAcl	yes	no
+Declaration	void int	void int eof continue break ; oAcl if while return switch id + minus ( num cAcl	no	no
+FTypeSpecifier2	id	void int eof continue break ; oAcl if while return switch id + minus ( num cAcl	no	no
+Var4	( ; oBrac	void int eof continue break ; oAcl if while return switch id + minus ( num cAcl	no	no
+Var1	; oBrac	void int eof continue break ; oAcl if while return switch id + minus ( num cAcl	no	no
+Params	int void	)	no	no
+FParam	id	)	yes	no
+ParamList1	comma	)	yes	no
+Param	void int	comma )	no	no
+TypeSpecifier	void int	id	no	no
+FTypeSpecifier1	id	comma )	no	no
+Var2	oBrac	comma )	yes	no
+DeclarationList	void int	eof continue break ; oAcl if while return switch id + minus ( num cAcl	yes	no
+StatementList1	continue break ; oAcl if while return switch id + minus ( num	case default cAcl	yes	no
+CompoundStmt	oAcl	case default else void int eof continue break ; oAcl if while return switch id + minus ( num cAcl	no	no
+ExpressionStmt	continue break ; id + minus ( num	case default continue break ; oAcl if while return switch id + minus ( num else cAcl	no	no
+SelectionStmt	if	case default continue break ; oAcl if while return switch id + minus ( num else cAcl	no	no
+IterationStmt	while	case default continue break ; oAcl if while return switch id + minus ( num else cAcl	no	no
+Statement	continue break ; oAcl if while return switch id + minus ( num	case default continue break ; oAcl if while return switch id + minus ( num else cAcl	no	no
+ReturnStmt	return	case default continue break ; oAcl if while return switch id + minus ( num else cAcl	no	no
+Freturn	; id + minus ( num	case default continue break ; oAcl if while return switch id + minus ( num else cAcl	no	no
+SwitchStmt	switch	case default continue break ; oAcl if while return switch id + minus ( num else cAcl	no	no
+CaseStmts	case	default cAcl	yes	no
+CaseStmts1	case	default cAcl	yes	no
+CaseStmt	case	case default cAcl	no	no
+DefaultStmt	default	cAcl	yes	no
+StatementList	continue break ; oAcl if while return switch id + minus ( num	case default cAcl	yes	no
+FExpr	( oBrac equal * + minus lt ~	; cBrac ) comma	yes	no
+FExpr1	equal * + minus lt ~	; cBrac ) comma	yes	no
+FAdditiveExpression	lt ~	; cBrac ) comma	yes	no
 Relop	lt ~	+ minus ( id num	no	no
-Additiveexpression	+ minus ( id num	; cBrac ) comma	no	no
-Additiveexpressionprime	+ minus	lt ~ ; cBrac ) comma	yes	no
+AdditiveExpression	+ minus ( id num	; cBrac ) comma	no	no
+AdditiveExpression1	+ minus	lt ~ ; cBrac ) comma	yes	no
 Addop	+ minus	+ minus ( id num	no	no
 Term	+ minus ( id num	+ minus lt ~ ; cBrac ) comma	no	no
-Termprime	*	+ minus lt ~ ; cBrac ) comma	yes	no
-Signedfactor	+ minus ( id num	* + minus lt ~ ; cBrac ) comma	no	no
+Term2	+ minus ( num	+ minus lt ~ ; cBrac ) comma	no	no
+Term1	*	+ minus lt ~ ; cBrac ) comma	yes	no
+SignedFactor	+ minus ( id num	* + minus lt ~ ; cBrac ) comma	no	no
+SignedFactor2	+ minus ( num	* + minus lt ~ ; cBrac ) comma	no	no
 Factor	( id num	* + minus lt ~ ; cBrac ) comma	no	no
-Var1	( oBrac	* + minus lt ~ ; cBrac ) comma	yes	no
-AAA	oBrac	equal * + minus lt ~ ; cBrac ) comma	yes	no
-Args	id ( num + minus	)	yes	no
-Arglist	id ( num + minus	)	no	no
-Expression	id ( num + minus	; cBrac ) comma	no	no
-Arglistprime	comma	)	yes	no
+Factor2	( num	* + minus lt ~ ; cBrac ) comma	no	no
+Var3	( oBrac	* + minus lt ~ ; cBrac ) comma	yes	no
+Var	oBrac	equal * + minus lt ~ ; cBrac ) comma	yes	no
+Args	id + minus ( num	)	yes	no
+ArgList	id + minus ( num	)	no	no
+Expression	id + minus ( num	; cBrac ) comma	no	no
+ArgList1	comma	)	yes	no
