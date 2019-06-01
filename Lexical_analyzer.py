@@ -5,7 +5,7 @@ import sys
 
 sys.setrecursionlimit(10000000)
 
-file_name = './test_case/testcase_7.txt'
+file_name = './test_case/testcase_6.txt'
 input_file = open(file_name, mode='r')
 code_string_all = input_file.read()
 
@@ -216,6 +216,7 @@ def get_next_token():
         res = make_next_token()
     if res[0][1] == 'invalid input':
         error_file.write(str(code_line) + ' : Lexical Error! invalid input ' + res[0][0] + '\n')
+        # print(str(code_line) + ' : Lexical Error! invalid input ' + res[0][0] + '\n')
     return res
 
 
@@ -254,9 +255,9 @@ depths = [0]
 def parser(token):
     global stack, depths
     print("stack is !", stack[::-1])
-    # if token == 'EOF' and len(stack) > 1:
-    #     error_file.write(str(code_line) + ' : Syntax Error! Malformed Input\n')
-    #     return False
+    if token == 'EOF' and stack[0] in terminals:
+        error_file.write(str(code_line) + ' : Syntax Error! Malformed Input\n')
+        return False
 
     if len(stack) == 1 and stack[0] == 'EOF':
         return True
@@ -268,6 +269,7 @@ def parser(token):
     if state in terminals or state == "==":
         if state != token:
             error_file.write(str(code_line) + ' : Syntax Error! Missing ' + state + '\n')
+            # print(str(code_line) + ' : Syntax Error! Missing ' + state + '\n')
             return parser(token)
 
         next_token_ = get_next_token()[0]
@@ -276,7 +278,7 @@ def parser(token):
     # print('error', state, first.get(state), follow.get(state))
     if token in first.get(state) or token in follow.get(state):
         for way in transition_diagram.get(state):
-            # print("this", first.get(way[0]), way)
+            # print("this", first.get(way[0]), way[0])
             if way == [] or token in first.get(way[0]) or ('ep' in first.get(way[0]) and token in follow.get(way[0])):
                 stack += way[::-1]
                 depths += [depth + 1 for i in range(len(way))]
@@ -284,9 +286,13 @@ def parser(token):
 
         if token in follow.get(state):
             error_file.write(str(code_line) + ' : Syntax Error! Missing ' + state + '\n')
+            # print(str(code_line) + ' : Syntax Error! Missing ' + state + '\n')
             return parser(token)
 
     error_file.write(str(code_line) + ' : Syntax Error! Unexpected ' + token + '\n')
+    # print(str(code_line) + ' : Syntax Error! Unexpected ' + token + '\n')
+    if token == "EOF":
+        return False
     stack += [state]
     depths += [depth]
     next_token_ = get_next_token()[0]
